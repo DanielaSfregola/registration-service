@@ -1,11 +1,9 @@
-package daniela.sfregola.registration.service.domain
+package daniela.sfregola.registration.service.dal
 
 import scala.slick.driver.ExtendedProfile
-import scala.slick.session.Session
-import scala.slick.driver.H2Driver
-import scala.slick.driver.SQLiteDriver
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import daniela.sfregola.registration.service.domain.UserComponent
 
 trait Profile {
   val profile: ExtendedProfile

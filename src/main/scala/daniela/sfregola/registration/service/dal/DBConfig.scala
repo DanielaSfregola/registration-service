@@ -1,4 +1,6 @@
-package daniela.sfregola.registration.service.domain
+package daniela.sfregola.registration.service.dal
+
+import daniela.sfregola.registration.service.service.Model
 
 trait DBConfig {
   def model: Model
@@ -6,7 +8,7 @@ trait DBConfig {
 
 import scala.slick.driver.H2Driver
 import scala.slick.driver.PostgresDriver
-import scala.slick.session.{ Database, Session }
+import scala.slick.session.Database
 
 trait TestDB extends DBConfig {
   val model = new Model("H2", new DAL(H2Driver),

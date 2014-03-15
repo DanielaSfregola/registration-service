@@ -1,14 +1,12 @@
-package daniela.sfregola.registration.service.domain
+package daniela.sfregola.registration.service.service
 
-import scala.slick.driver.H2Driver
-import scala.slick.session.{ Database, Session }
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import scala.slick.session.Database
+import daniela.sfregola.registration.service.dal.DAL
+import daniela.sfregola.registration.service.domain.User
 
-class Model(name: String, dal: DAL, db: Database) {
+class RegistrationService(name: String, dal: DAL, db: Database) {
 
   import dal._
-  import dal.profile.simple._
 
   implicit val implicitSession = db.createSession
 
@@ -46,5 +44,10 @@ class Model(name: String, dal: DAL, db: Database) {
     val result = Users.insert(user)
     println("Inserted user: " + result)
     result
+  }
+
+  def removeUser(user: User) {
+    Users.delete(user)
+    println("Deleted user: " + user)
   }
 }
