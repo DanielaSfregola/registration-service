@@ -17,24 +17,24 @@ class UserManager(name: String, dal: DAL, db: Database) {
   def purgeDB = dal.purge
 
   def getAllUsers(): List[User] = {
-    val result = Users.queryFindAll
+    val result = Users.findAll
     println("Got users: " + result)
     result
   }
 
   def getUserById(id: Long): Option[User] = {
-    val result = Users.queryFindOneById(id)
+    val result = Users.findOneById(id)
     result match {
-      case Some(User) => println("Found user " + result)
+      case user: Some[User] => println("Found user " + user.get)
       case _ => println("No user found with id " + id)
     }
     result
   }
 
   def getUserByEmail(email: String): Option[User] = {
-    val result = Users.queryFindOneByEmail(email)
+    val result = Users.findOneByEmail(email)
     result match {
-      case Some(User) => println("Found user " + result)
+      case user: Some[User] => println("Found user " + user.get)
       case _ => println("No user found with email " + email)
     }
     result

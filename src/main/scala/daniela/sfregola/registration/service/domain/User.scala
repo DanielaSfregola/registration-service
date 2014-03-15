@@ -16,20 +16,22 @@ trait UserComponent { this: Profile =>
     def * = email ~ hashedPassword ~ id
     def idx = index("idx_user", (id, email), unique = true)
     def mapped = email ~ hashedPassword ~ id <> ({ (email, password, id) => User(email, password, id) },
-                                           { x: User => Some((x.email, x.hashedPassword, x.id)) })
+                                           { u: User => Some((u.email, u.hashedPassword, u.id)) })
 
     val autoInc = email ~ hashedPassword returning id into {
                                 case (credentials, id) => User(credentials._1, credentials._2, id)
                                 }
 
-    def queryFindAll = for (x <- Users) yield x
+    def queryFindAll = for (u <- Users) yield u
 
-    def queryFindOneById(id: Long) = Query(User).filter(_.id === id)
+    def queryFindOneById(id: Long) = for (u <- Users if u.id === id) yield u mapped
 
-    def queryFindOneByEmail(email: String) = Query(User).filter(_.email === email)
+    def queryFindOneByEmail(email: String) = for (u <- Users if u.email === email) yield u mapped
 
     def insert = email ~ hashedPassword <> ({ (email, password) => User(email, password, None) },
                                         { u: User => Some((u.email, u.hashedPassword)) })
+
+    def deleteById(id: Long)(implicit session: Session) = (for (u <- Users if u.id === id) yield u).delete
 
     def findAll(implicit session: Session): List[User] = {
       queryFindAll.list map { u => User(email = u._1, hashedPassword = u._2, id = u._3) }
@@ -48,8 +50,11 @@ trait UserComponent { this: Profile =>
       autoInc.insert(email, hashedPassword)
     }
 
-    def delete(user: User)(implicit session: Session) {
-      findOneById(user.id).delete
+    def delete(user: User)(implicit session: Session) =  {
+      user.id match {
+        case id: Some[Long] => deleteById(id.get)
+        case _ =>
+      }
     }
 
   }
