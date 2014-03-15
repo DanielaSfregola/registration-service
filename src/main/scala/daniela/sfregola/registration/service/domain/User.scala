@@ -1,8 +1,8 @@
 package daniela.sfregola.registration.service.domain
 
 import daniela.sfregola.registration.service.dal.Profile
+import org.mindrot.jbcrypt.BCrypt
 
-// TODO - tests
 case class User(email: String, hashedPassword: String, id: Option[Long] = None)
 
 trait UserComponent { this: Profile =>
@@ -22,25 +22,25 @@ trait UserComponent { this: Profile =>
                                 case (credentials, id) => User(credentials._1, credentials._2, id)
                                 }
 
-    def forFindAll = for (x <- Users) yield x
+    def queryFindAll = for (x <- Users) yield x
 
-    def forFindOneById(id: Long) = for (x <- User if x.id == id) yield x
+    def queryFindOneById(id: Long) = Query(User).filter(_.id === id)
 
-    def forFindOneByEmail(email: String) = for (x <- User if x.email == email) yield x
+    def queryFindOneByEmail(email: String) = Query(User).filter(_.email === email)
 
     def insert = email ~ hashedPassword <> ({ (email, password) => User(email, password, None) },
-                                        { x: User => Some((x.email, x.hashedPassword)) })
+                                        { u: User => Some((u.email, u.hashedPassword)) })
 
     def findAll(implicit session: Session): List[User] = {
-      forFindAll.list map { x => User(email = x._1, hashedPassword = x._2, id = x._3) }
+      queryFindAll.list map { u => User(email = u._1, hashedPassword = u._2, id = u._3) }
     }
 
     def findOneById(id: Long)(implicit session: Session): Option[User] = {
-      forFindOneById(id).firstOption
+      queryFindOneById(id).firstOption
     }
 
     def findOneByEmail(email: String)(implicit session: Session): Option[User] = {
-      forFindOneByEmail(email).firstOption
+      queryFindOneByEmail(email).firstOption
     }
 
     def insert(email: String, password: String)(implicit session: Session): User = {
@@ -49,7 +49,7 @@ trait UserComponent { this: Profile =>
     }
 
     def delete(user: User)(implicit session: Session) {
-      Users.where(_ === user).delete
+      findOneById(user.id).delete
     }
 
   }

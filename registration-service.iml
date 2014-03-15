@@ -99,6 +99,7 @@
     <orderEntry type="library" scope="TEST" name="SBT: xalan:xalan:2.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="SBT: xerces:xercesImpl:2.10.0" level="project" />
     <orderEntry type="library" scope="TEST" name="SBT: xml-apis:xml-apis:1.4.01" level="project" />
+    <orderEntry type="library" name="SBT: org.mindrot:jbcrypt:0.3m" level="project" />
   </component>
 </module>
 

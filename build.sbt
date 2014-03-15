@@ -1,6 +1,6 @@
 organization := "daniela.sfregola"
 
-name := "registration-manager"
+name := "registration-service"
 
 version := "0.0.1"
 
@@ -29,6 +29,7 @@ libraryDependencies ++= Seq(
   ,"ch.qos.logback" % "logback-classic" % "1.0.7" //% "test"
   ,"org.scalatest" %% "scalatest" % "1.9.1"
   ,"org.seleniumhq.selenium" % "selenium-java" % "2.28.0" % "test"
+  ,"org.mindrot" % "jbcrypt" % "0.3m"
 // ,"com.typesafe.akka" %% "akka-osgi" % "2.2.0"
 // ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.0"
 // ,"com.typesafe.akka" %% "akka-testkit" % "2.2.0"
