@@ -1,6 +1,6 @@
 organization := "daniela.sfregola"
 
-name := "registration-service"
+name := "registration-manager"
 
 version := "0.0.1"
 

@@ -1,9 +1,9 @@
 package daniela.sfregola.registration.service.dal
 
-import daniela.sfregola.registration.service.service.Model
+import daniela.sfregola.registration.service.manager.UserManager
 
 trait DBConfig {
-  def model: Model
+  def userManager: UserManager
 }
 
 import scala.slick.driver.H2Driver
@@ -11,18 +11,18 @@ import scala.slick.driver.PostgresDriver
 import scala.slick.session.Database
 
 trait TestDB extends DBConfig {
-  val model = new Model("H2", new DAL(H2Driver),
+  val userManager = new UserManager("H2", new DAL(H2Driver),
     Database.forURL("jdbc:h2:mem:servicetestdb", driver = "org.h2.Driver"))
-  model.createDB
+  userManager.createDB
 }
 
 trait ProductionDB extends DBConfig {
-  val model = new Model("PostgreSQL", new DAL(PostgresDriver),
+  val userManager = new UserManager("PostgreSQL", new DAL(PostgresDriver),
     Database.forURL("jdbc:postgresql:test:daniela:sfregola",
       driver="org.postgresql.Driver",
       user="daniela",
       password="daniela"))
-  model.createDB
+  userManager.createDB
 }
 
 

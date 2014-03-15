@@ -1,10 +1,10 @@
-package daniela.sfregola.registration.service.service
+package daniela.sfregola.registration.service.manager
 
 import scala.slick.session.Database
 import daniela.sfregola.registration.service.dal.DAL
 import daniela.sfregola.registration.service.domain.User
 
-class RegistrationService(name: String, dal: DAL, db: Database) {
+class UserManager(name: String, dal: DAL, db: Database) {
 
   import dal._
 
@@ -40,8 +40,8 @@ class RegistrationService(name: String, dal: DAL, db: Database) {
     result
   }
 
-  def addUser(user: User): User = {
-    val result = Users.insert(user)
+  def addUser(email: String, password: String): User = {
+    val result = Users.insert(email, password)
     println("Inserted user: " + result)
     result
   }
