@@ -12,9 +12,6 @@ trait Profile {
 class DAL(override val profile: ExtendedProfile) extends UserComponent with Profile {
   import profile.simple._
 
-  val logger: Logger = LoggerFactory.getLogger(this.getClass);
-  logger.info("User model class instantiated")
-
   def ddl = (Users.ddl)
 
   def create(implicit session: Session): Unit = {

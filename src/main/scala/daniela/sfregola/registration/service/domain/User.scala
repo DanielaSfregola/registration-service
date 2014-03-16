@@ -2,11 +2,14 @@ package daniela.sfregola.registration.service.domain
 
 import daniela.sfregola.registration.service.dal.Profile
 import org.mindrot.jbcrypt.BCrypt
+import org.slf4j.{LoggerFactory, Logger}
 
 case class User(email: String, hashedPassword: String, id: Option[Long] = None)
 
 trait UserComponent { this: Profile =>
   import profile.simple._
+
+  val logger: Logger = LoggerFactory.getLogger(this.getClass);
 
   object Users extends Table[(String, String, Option[Long])]("USER") {
 
@@ -46,14 +49,22 @@ trait UserComponent { this: Profile =>
     }
 
     def insert(email: String, password: String)(implicit session: Session): User = {
-      def hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-      autoInc.insert(email, hashedPassword)
+      findOneByEmail(email) match {
+        case user: Some[User] => {
+          logger.error(email + ": a user with this email already exists")
+          throw new IllegalArgumentException(email + ": a user with this email already exists")
+        }
+        case _ => {
+            def hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+            autoInc.insert(email, hashedPassword)
+        }
+      }
     }
 
     def delete(user: User)(implicit session: Session) =  {
       user.id match {
         case id: Some[Long] => deleteById(id.get)
-        case _ =>
+        case _ => logger.warn("Requested to delete unexisting user: doing nothing...")
       }
     }
 
