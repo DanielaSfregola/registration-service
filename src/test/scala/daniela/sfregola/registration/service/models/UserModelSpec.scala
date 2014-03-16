@@ -1,20 +1,20 @@
-package daniela.sfregola.registration.service.manager
+package daniela.sfregola.registration.service.models
 
 import org.scalatest._
 import daniela.sfregola.registration.service.dal.DAL
 import org.scalatest.matchers.ClassicMatchers
 
-class UserManagerSpec extends FlatSpec with ClassicMatchers {
+class UserModelSpec extends FlatSpec with ClassicMatchers {
 
   import scala.slick.driver.H2Driver
   import scala.slick.session.{ Database, Session }
-  val userManager = new UserManager("H2", new DAL(H2Driver),
+  val userManager = new UserModel("H2", new DAL(H2Driver),
     Database.forURL("jdbc:h2:mem:testdb", driver = "org.h2.Driver"))
 
   val email = "daniela.sfregola@gmail.com"
   val password = "test"
 
-  "A user manager" should "add a user" in {
+  "A user model" should "add a user" in {
       createDb
       addUser
       userManager.getAllUsers().size === 1

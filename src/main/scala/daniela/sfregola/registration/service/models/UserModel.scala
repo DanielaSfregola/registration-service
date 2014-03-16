@@ -1,12 +1,15 @@
-package daniela.sfregola.registration.service.manager
+package daniela.sfregola.registration.service.models
 
 import scala.slick.session.Database
 import daniela.sfregola.registration.service.dal.DAL
 import daniela.sfregola.registration.service.domain.User
+import org.slf4j.{LoggerFactory, Logger}
 
-class UserManager(name: String, dal: DAL, db: Database) {
+class UserModel(name: String, dal: DAL, db: Database) {
 
   import dal._
+
+  val logger: Logger = LoggerFactory.getLogger(this.getClass);
 
   implicit val implicitSession = db.createSession
 
@@ -18,15 +21,15 @@ class UserManager(name: String, dal: DAL, db: Database) {
 
   def getAllUsers(): List[User] = {
     val result = Users.findAll
-    println("Got users: " + result)
+    logger.info("Got users: " + result)
     result
   }
 
   def getUserById(id: Long): Option[User] = {
     val result = Users.findOneById(id)
     result match {
-      case user: Some[User] => println("Found user " + user.get)
-      case _ => println("No user found with id " + id)
+      case user: Some[User] => logger.info("Found user " + user.get)
+      case _ => logger.info("No user found with id " + id)
     }
     result
   }
@@ -34,20 +37,20 @@ class UserManager(name: String, dal: DAL, db: Database) {
   def getUserByEmail(email: String): Option[User] = {
     val result = Users.findOneByEmail(email)
     result match {
-      case user: Some[User] => println("Found user " + user.get)
-      case _ => println("No user found with email " + email)
+      case user: Some[User] => logger.info("Found user " + user.get)
+      case _ => logger.info("No user found with email " + email)
     }
     result
   }
 
   def addUser(email: String, password: String): User = {
     val result = Users.insert(email, password)
-    println("Inserted user: " + result)
+    logger.info("Inserted user: " + result)
     result
   }
 
   def removeUser(user: User) {
     Users.delete(user)
-    println("Deleted user: " + user)
+    logger.info("Deleted user: " + user)
   }
 }

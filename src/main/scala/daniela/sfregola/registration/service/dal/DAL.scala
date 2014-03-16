@@ -12,8 +12,8 @@ trait Profile {
 class DAL(override val profile: ExtendedProfile) extends UserComponent with Profile {
   import profile.simple._
 
-  val logger: Logger = LoggerFactory.getLogger("daniela.sfregola.domain");
-  logger.info("Model class instantiated")
+  val logger: Logger = LoggerFactory.getLogger(this.getClass);
+  logger.info("User model class instantiated")
 
   def ddl = (Users.ddl)
 
@@ -21,7 +21,7 @@ class DAL(override val profile: ExtendedProfile) extends UserComponent with Prof
     try {
       ddl.create
     } catch {
-      case e: Exception => logger.info("Could not create database... assuming it already exists")
+      case e: Exception => logger.warn("Could not create database... assuming it already exists")
     }
   }
 
@@ -29,7 +29,7 @@ class DAL(override val profile: ExtendedProfile) extends UserComponent with Prof
     try {
       ddl.drop
     } catch {
-      case e: Exception => logger.info("Could not drop database")
+      case e: Exception => logger.error("Could not drop database")
     }
   }
 
